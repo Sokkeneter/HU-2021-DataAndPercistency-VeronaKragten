@@ -1,5 +1,6 @@
 package main.persistence;
 
+import domain.Adres;
 import domain.Reiziger;
 
 import java.sql.*;
