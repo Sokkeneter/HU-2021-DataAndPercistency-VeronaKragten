@@ -71,8 +71,8 @@ public class Main {
     public static void main(String[] args) {
         try{
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
-            ReizigerDAOPsql reizigerDAOPsql = new ReizigerDAOPsql(connection);
-            AdresDAOPSql adresDAOPSql = new AdresDAOPSql(connection);
+            ReizigerDAO reizigerDAOPsql = new ReizigerDAOPsql(connection);
+            AdresDAO adresDAOPSql = new AdresDAOPSql(connection);
 
             testReizigerDAO(reizigerDAOPsql);
             testAdresDAO(adresDAOPSql);
