@@ -2,19 +2,19 @@ package domain;
 
 public class Adres {
     int id;
-    int reizigerId;
+    Reiziger reiziger;
     String postcode;
     String huisnummer;
     String straat;
     String woonplaats;
 
-    public Adres(int id, String postcode, String huisnummer, String straat, String woonplaats, int reizigerId) {
+    public Adres(int id, String postcode, String huisnummer, String straat, String woonplaats, Reiziger reiziger) {
         this.id = id;
         this.postcode = postcode;
         this.huisnummer = huisnummer;
         this.straat = straat;
         this.woonplaats = woonplaats;
-        this.reizigerId = reizigerId;
+        this.reiziger = reiziger;
     }
 
     public int getId() {
@@ -57,12 +57,12 @@ public class Adres {
         this.woonplaats = woonplaats;
     }
 
-    public int getReizigerId() {
-        return reizigerId;
+    public Reiziger getReiziger() {
+        return reiziger;
     }
 
-    public void setReizigerId(int reizigerId) {
-        this.reizigerId = reizigerId;
+    public void setReiziger(Reiziger reiziger) {
+        this.reiziger = reiziger;
     }
 
     @Override

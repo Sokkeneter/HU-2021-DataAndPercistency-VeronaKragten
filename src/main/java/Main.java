@@ -53,7 +53,7 @@ public class Main {
     private static void testAdresDAO(AdresDAO adao) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
         Reiziger reiziger = new Reiziger(6,"B","de", "pepperoni", java.sql.Date.valueOf("1981-03-14"));
-        Adres adres = new Adres(6,"2987HY","14", "pepperoni", "Amsterdam", 6);
+        Adres adres = new Adres(6,"2987HY","14", "pepperoni", "Amsterdam", reiziger);
         ReizigerDAOPsql reizigerDAOPsql = new ReizigerDAOPsql(connection);
         reizigerDAOPsql.save(reiziger);
         adao.save(adres);
@@ -66,6 +66,7 @@ public class Main {
             System.out.println(reiziger1 + ", " + adres1);
         }
         adao.delete(adres);
+        reizigerDAOPsql.delete(reiziger);
     }
 
     public static void main(String[] args) {
