@@ -3,6 +3,7 @@ package domain;
 public class Adres {
     int id;
     Reiziger reiziger;
+
     String postcode;
     String huisnummer;
     String straat;
