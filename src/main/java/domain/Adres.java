@@ -9,8 +9,7 @@ public class Adres {
     String straat;
     String woonplaats;
 
-    public Adres(int id, String postcode, String huisnummer, String straat, String woonplaats, Reiziger reiziger) {
-        this.id = id;
+    public Adres(String postcode, String huisnummer, String straat, String woonplaats, Reiziger reiziger) {
         this.postcode = postcode;
         this.huisnummer = huisnummer;
         this.straat = straat;
@@ -68,6 +67,6 @@ public class Adres {
 
     @Override
     public String toString() {
-        return String.format( "Adres {#%s %s - %s}",id, postcode, huisnummer);
+        return String.format( "Adres {%s - %s}", postcode, huisnummer);
     }
 }

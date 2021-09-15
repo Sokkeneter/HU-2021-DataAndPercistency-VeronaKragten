@@ -1,7 +1,8 @@
-package main.persistence;
+package main.persistence.psql;
 
 import domain.Adres;
 import domain.Reiziger;
+import main.persistence.ReizigerDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -85,13 +86,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int reiziger_id = resultSet.getInt("reiziger_id");
                 String voorletters = resultSet.getString("voorletters");
                 String tussenvoegsel = resultSet.getString("tussenvoegsel");
                 String achternaam = resultSet.getString("achternaam");
                 java.sql.Date geboortedatum = resultSet.getDate("geboortedatum");
+                String naam = String.format("%s %s %s",voorletters,tussenvoegsel,achternaam);
 
-                Reiziger reiziger = new Reiziger(reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum);
+                Reiziger reiziger = new Reiziger(naam, geboortedatum);
+                reiziger.setId(id);
                 return reiziger;
             }
             return null;
@@ -111,13 +113,15 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             statement.setDate(1, birthDate);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int reiziger_id = resultSet.getInt("reiziger_id");
+                int id = resultSet.getInt("reiziger_id");
                 String voorletters = resultSet.getString("voorletters");
                 String tussenvoegsel = resultSet.getString("tussenvoegsel");
                 String achternaam = resultSet.getString("achternaam");
                 java.sql.Date geboortedatum = resultSet.getDate("geboortedatum");
+                String naam = String.format("%s %s %s",voorletters,tussenvoegsel,achternaam);
 
-                Reiziger reiziger = new Reiziger(reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum);
+                Reiziger reiziger = new Reiziger(naam, geboortedatum);
+                reiziger.setId(id);
                 reizigerList.add(reiziger);
             }
             return reizigerList;
@@ -135,14 +139,15 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int reiziger_id = resultSet.getInt("reiziger_id");
+                int id = resultSet.getInt("reiziger_id");
                 String voorletters = resultSet.getString("voorletters");
                 String tussenvoegsel = resultSet.getString("tussenvoegsel");
                 String achternaam = resultSet.getString("achternaam");
                 java.sql.Date geboortedatum = resultSet.getDate("geboortedatum");
+                String naam = String.format("%s %s %s",voorletters,tussenvoegsel,achternaam);
 
-                Reiziger reiziger = new Reiziger(reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum);
-                reizigerList.add(reiziger);
+                Reiziger reiziger = new Reiziger(naam, geboortedatum);reizigerList.add(reiziger);
+                reiziger.setId(id);
             }
             return reizigerList;
         }catch (Exception e){

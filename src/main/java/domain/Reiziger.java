@@ -1,6 +1,8 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Reiziger {
     private int id;
@@ -8,12 +10,14 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private Date geboorteDatum;
+    private List<OVChipkaart> ovChipkaarten = new ArrayList<OVChipkaart>();
 
-    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboorteDatum) {
-        this.id = id;
-        this.voorletters = voorletters;
-        this.tussenvoegsel = tussenvoegsel;
-        this.achternaam = achternaam;
+    public Reiziger(String naam, Date geboorteDatum) {
+        String[] list=naam.split(" ");
+        this.voorletters = list[0];
+        this.tussenvoegsel = list[1];
+        this.achternaam = list[2];
+
         this.geboorteDatum = geboorteDatum;
     }
 
@@ -58,13 +62,24 @@ public class Reiziger {
         this.id = id;
     }
     public String getNaam(){
-       return String.format("%s. %s. %s", voorletters,tussenvoegsel,achternaam);
-    }
+        if(tussenvoegsel != null) {
+            return (String.format("reiziger: %s. %s %s", voorletters, tussenvoegsel, achternaam));
+        }
+        else{
+            return (String.format("reiziger: %s. %s", voorletters, achternaam));
+        }    }
 
+    public void addToKaarten(OVChipkaart ovChipkaart){
+        ovChipkaarten.add(ovChipkaart);
+    }
     @Override
     public String toString() {
-        return (String.format("#%s: %s. %s. %s (%s)", id,voorletters, tussenvoegsel, achternaam, geboorteDatum));
-
+        if(tussenvoegsel != "null") {
+            return (String.format("reiziger: %s. %s %s (%s)", voorletters, tussenvoegsel, achternaam, geboorteDatum));
+        }
+        else{
+            return (String.format("reiziger: %s. %s (%s)", voorletters, achternaam, geboorteDatum));
+        }
     }
 
 }

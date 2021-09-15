@@ -1,13 +1,15 @@
-package main.persistence;
+package main.persistence.psql;
 
 import domain.Adres;
 import domain.Reiziger;
+import main.persistence.AdresDAO;
+import main.persistence.ReizigerDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdresDAOPSql implements AdresDAO{
+public class AdresDAOPSql implements AdresDAO {
     private final Connection conn;
 
     public AdresDAOPSql(Connection conn) {
@@ -96,9 +98,9 @@ public class AdresDAOPSql implements AdresDAO{
                 String huisnummer = resultSet.getString("huisnummer");
                 String straat = resultSet.getString("straat");
                 String woonplaats = resultSet.getString("woonplaats");
-                int reizigerId = resultSet.getInt("reiziger_id");
 
-                Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
+                Adres adres = new Adres(postcode, huisnummer, straat, woonplaats, reiziger);
+                adres.setId(adres_id);
                 return adres;
             }
             return null;
@@ -126,7 +128,8 @@ public class AdresDAOPSql implements AdresDAO{
                 ReizigerDAO rdaesql = new ReizigerDAOPsql(conn);
                 Reiziger reiziger = rdaesql.findById(reizigerId);
 
-                Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
+                Adres adres = new Adres( postcode, huisnummer, straat, woonplaats, reiziger);
+                adres.setId(adres_id);
                 adresList.add(adres);
             }
             return adresList;
