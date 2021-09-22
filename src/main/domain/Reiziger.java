@@ -1,4 +1,4 @@
-package domain;
+package main.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +11,7 @@ public class Reiziger {
     private String achternaam;
     private Date geboorteDatum;
     private List<OVChipkaart> ovChipkaarten = new ArrayList<OVChipkaart>();
-
+//kijk naar hashmap
     public Reiziger(String naam, Date geboorteDatum) {
         String[] list=naam.split(" ");
         this.voorletters = list[0];

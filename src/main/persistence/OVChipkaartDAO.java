@@ -1,8 +1,7 @@
 package main.persistence;
 
-import domain.Adres;
-import domain.OVChipkaart;
-import domain.Reiziger;
+import main.domain.OVChipkaart;
+import main.domain.Reiziger;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,6 +1,6 @@
 package main.persistence;
 
-import domain.Reiziger;
+import main.domain.Reiziger;
 
 import java.sql.SQLException;
 import java.util.List;

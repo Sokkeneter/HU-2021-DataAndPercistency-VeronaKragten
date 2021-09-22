@@ -1,7 +1,7 @@
 package main.persistence;
 
-import domain.Adres;
-import domain.Reiziger;
+import main.domain.Adres;
+import main.domain.Reiziger;
 
 import java.sql.SQLException;
 import java.util.List;

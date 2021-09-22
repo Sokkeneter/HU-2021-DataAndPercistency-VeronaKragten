@@ -1,7 +1,6 @@
 package main.persistence.psql;
 
-import domain.Adres;
-import domain.Reiziger;
+import main.domain.Reiziger;
 import main.persistence.ReizigerDAO;
 
 import java.sql.*;

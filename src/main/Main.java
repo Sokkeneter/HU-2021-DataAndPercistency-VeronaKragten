@@ -1,6 +1,8 @@
-import domain.Adres;
-import domain.OVChipkaart;
-import domain.Reiziger;
+package main;
+
+import main.domain.Adres;
+import main.domain.OVChipkaart;
+import main.domain.Reiziger;
 import main.persistence.AdresDAO;
 import main.persistence.OVChipkaartDAO;
 import main.persistence.psql.AdresDAOPSql;
@@ -91,7 +93,7 @@ public class Main {
 
         for(Reiziger reiziger1: reizigerDAO.findAll()){
             List<OVChipkaart> kaarten = odao.findByReiziger(reiziger1);
-                    System.out.println(reiziger1);
+                    System.out.println(reiziger1.getNaam());
                     for(OVChipkaart ovChipkaart2 : kaarten){
                         System.out.println(ovChipkaart2);
                     }

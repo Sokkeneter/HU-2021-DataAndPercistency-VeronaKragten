@@ -1,8 +1,7 @@
 package main.persistence.psql;
 
-import domain.Adres;
-import domain.OVChipkaart;
-import domain.Reiziger;
+import main.domain.OVChipkaart;
+import main.domain.Reiziger;
 import main.persistence.OVChipkaartDAO;
 import main.persistence.ReizigerDAO;
 
