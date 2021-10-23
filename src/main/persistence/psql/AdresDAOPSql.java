@@ -50,16 +50,15 @@ public class AdresDAOPSql implements AdresDAO {
             String straat = adres.getStraat();
             String woonplaats = adres.getWoonplaats();
             int reizigerId = adres.getReiziger().getId();
-            String query = "update adres set adres_id = ?, postcode = ?, huisnummer = ?, straat = ?, woonplaats = ?, reiziger_id = ? where adres_id = ?;";
+            String query = "update adres set postcode = ?, huisnummer = ?, straat = ?, woonplaats = ?, reiziger_id = ? where adres_id = ?;";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setInt(1, id);
-            preparedStmt.setString(2, postcode);
-            preparedStmt.setString(3, huisnummer);
-            preparedStmt.setString(4, straat);
-            preparedStmt.setString(5, woonplaats);
-            preparedStmt.setInt(6, reizigerId);
+            preparedStmt.setString(1, postcode);
+            preparedStmt.setString(2, huisnummer);
+            preparedStmt.setString(3, straat);
+            preparedStmt.setString(4, woonplaats);
+            preparedStmt.setInt(5, reizigerId);
 
-            preparedStmt.setInt(7, id);
+            preparedStmt.setInt(6, id);
 
             int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));

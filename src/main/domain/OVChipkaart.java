@@ -1,6 +1,8 @@
 package main.domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OVChipkaart {
     private int kaartNummer;
@@ -8,6 +10,7 @@ public class OVChipkaart {
     private int klasse;
     private double saldo;
     private Reiziger reiziger;
+    private List<Product> producten = new ArrayList<Product>();
 
     public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, double saldo, Reiziger reiziger) {
         this.kaartNummer = kaartNummer;
@@ -58,8 +61,21 @@ public class OVChipkaart {
         this.reiziger = reiziger;
     }
 
+    public List<Product> getProducten() {
+        return producten;
+    }
+
+    public void addProduct(Product product) {
+        this.producten.add(product);
+    }
+
     @Override
     public String toString() {
-        return String.format("ovChipkaart %s: geldig tot %s, %se klasse, saldo: €%s, van reiziger %s", kaartNummer,geldigTot,klasse,saldo,reiziger.getNaam());
+
+        String string = String.format("(ovChipkaart %s: geldig tot %s, %se klasse, saldo: €%s, van reiziger %s. producten: )", kaartNummer,geldigTot,klasse,saldo,reiziger.getNaam());
+        for(Product product : producten){
+            string += (product.getNaam() + ",\n");
+        }
+        return string;
     }
 }

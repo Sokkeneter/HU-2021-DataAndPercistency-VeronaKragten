@@ -24,9 +24,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             String tussenvoegsel = reiziger.getTussenvoegsel();
             String achternaam = reiziger.getAchternaam();
             Date geboortedatum = reiziger.getGeboorteDatum();
-            int resultSet = statement.executeUpdate(String.format(
-                    "INSERT INTO reiziger\n" +
-                            "VALUES ('%s', '%s', '%s', '%s', '%s'); ", id, voorletters, tussenvoegsel, achternaam, geboortedatum));
+            String query = "INSERT INTO reiziger(voorletters, tussenvoegsel, achternaam, geboortedatum) VALUES (?, ?, ?, ? )";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, voorletters);
+            preparedStmt.setString(2, tussenvoegsel);
+            preparedStmt.setString(3, achternaam);
+            preparedStmt.setDate(4, (java.sql.Date) geboortedatum);
+             int resultSet = preparedStmt.executeUpdate();
+
             return Boolean.getBoolean(String.valueOf(resultSet));
         }catch (Exception e){
             e.printStackTrace();
@@ -43,15 +48,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             String achternaam = reiziger.getAchternaam();
             java.sql.Date geboortedatum = (java.sql.Date) reiziger.getGeboorteDatum();
 //        https://alvinalexander.com/java/java-mysql-update-query-example/ voorbeeld gebruikt
-            String query = "update reiziger set reiziger_id = ?, voorletters = ?, tussenvoegsel = ?, achternaam = ?, geboortedatum = ? where reiziger_id = ?";
+            String query = "update reiziger set voorletters = ?, tussenvoegsel = ?, achternaam = ?, geboortedatum = ? where reiziger_id = ?";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setInt(1, id);
-            preparedStmt.setString(2, voorletters);
-            preparedStmt.setString(3, tussenvoegsel);
-            preparedStmt.setString(4, achternaam);
-            preparedStmt.setDate(5, geboortedatum);
+            preparedStmt.setString(1, voorletters);
+            preparedStmt.setString(2, tussenvoegsel);
+            preparedStmt.setString(3, achternaam);
+            preparedStmt.setDate(4, geboortedatum);
 
-            preparedStmt.setInt(6, id);
+            preparedStmt.setInt(5, id);
 
             int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));

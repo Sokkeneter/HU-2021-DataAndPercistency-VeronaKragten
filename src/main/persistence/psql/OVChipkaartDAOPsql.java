@@ -1,6 +1,7 @@
 package main.persistence.psql;
 
 import main.domain.OVChipkaart;
+import main.domain.Product;
 import main.domain.Reiziger;
 import main.persistence.OVChipkaartDAO;
 import main.persistence.ReizigerDAO;
@@ -31,6 +32,15 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             preparedStmt.setInt(3, klasse);
             preparedStmt.setDouble(4, saldo);
             preparedStmt.setInt(5, reizigerId);
+//            list of products
+            for(Product product: ovChipkaart.getProducten()){
+                String queryPOVC = "INSERT INTO ov_chipkaart_product (kaart_nummer, product_nummer ) VALUES (?,?) ON CONFLICT DO NOTHING;";
+                PreparedStatement preparedStmtPOVC = conn.prepareStatement(queryPOVC);
+                int productnummer = product.getProductNummer();
+                preparedStmtPOVC.setInt(1, kaartNummer);
+                preparedStmtPOVC.setInt(2, productnummer);
+                preparedStmtPOVC.executeUpdate();
+            }
 
             int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));
@@ -57,6 +67,19 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             preparedStmt.setInt(5, reizigerId);
             preparedStmt.setInt(6, kaartNummer);
 
+            String deletePOVC = "DELETE FROM ov_chipkaart_product WHERE kaart_nummer = ?";
+            PreparedStatement preparedStmtDeletePOVC = conn.prepareStatement(deletePOVC);
+            preparedStmtDeletePOVC.setInt(1, kaartNummer);
+
+            preparedStmtDeletePOVC.executeUpdate();
+            for(Product product: ovChipkaart.getProducten()){
+                String queryPOVC = "INSERT INTO ov_chipkaart_product (kaart_nummer, product_nummer ) VALUES (?,?);";
+                PreparedStatement preparedStmtPOVC = conn.prepareStatement(queryPOVC);
+                int productnummer = product.getProductNummer();
+                preparedStmtPOVC.setInt(1, kaartNummer);
+                preparedStmtPOVC.setInt(2, productnummer);
+                preparedStmtPOVC.executeUpdate();
+            }
             int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));
         }catch (Exception e){
@@ -68,8 +91,13 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public boolean delete(OVChipkaart ovChipkaart) throws SQLException {
         try{
+            String deletePOVC = "DELETE FROM ov_chipkaart_product WHERE kaart_nummer = ?";
+            PreparedStatement preparedStmtDeletePOVC = conn.prepareStatement(deletePOVC);
+            preparedStmtDeletePOVC.setInt(1, ovChipkaart.getKaartNummer());
+            preparedStmtDeletePOVC.executeUpdate();
+
             int kaartNummer = ovChipkaart.getKaartNummer();
-            String query = "DELETE FROM ov_chipkaart where kaart_nummer = ?";
+            String query = "DELETE FROM ov_chipkaart CASCADE where kaart_nummer = ?";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             preparedStmt.setInt(1, kaartNummer);
 
@@ -94,6 +122,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 Date geldigTot = resultSet.getDate("geldig_tot");
                 int klasse = resultSet.getInt("klasse");
                 double saldo = resultSet.getDouble("saldo");
+
 
                 OVChipkaart ovChipkaart = new OVChipkaart(kaartnummer,geldigTot,klasse,saldo,reiziger);
                 ovChipkaartList.add(ovChipkaart);

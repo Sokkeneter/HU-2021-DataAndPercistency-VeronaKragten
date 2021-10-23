@@ -3,6 +3,7 @@ package main.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Reiziger {
     private int id;
@@ -61,6 +62,7 @@ public class Reiziger {
     public void setId(int id) {
         this.id = id;
     }
+
     public String getNaam(){
         if(tussenvoegsel != null) {
             return (String.format("reiziger: %s. %s %s", voorletters, tussenvoegsel, achternaam));
@@ -74,7 +76,7 @@ public class Reiziger {
     }
     @Override
     public String toString() {
-        if(tussenvoegsel != "null") {
+        if(!Objects.equals(tussenvoegsel, "null")) {
             return (String.format("reiziger: %s. %s %s (%s)", voorletters, tussenvoegsel, achternaam, geboorteDatum));
         }
         else{

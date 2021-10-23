@@ -2,12 +2,15 @@ package main;
 
 import main.domain.Adres;
 import main.domain.OVChipkaart;
+import main.domain.Product;
 import main.domain.Reiziger;
 import main.persistence.AdresDAO;
 import main.persistence.OVChipkaartDAO;
+import main.persistence.ProductDAO;
 import main.persistence.psql.AdresDAOPSql;
 import main.persistence.ReizigerDAO;
 import main.persistence.psql.OVChipkaartDAOPsql;
+import main.persistence.psql.ProductDAOPSql;
 import main.persistence.psql.ReizigerDAOPsql;
 
 import java.sql.*;
@@ -54,8 +57,8 @@ public class Main {
             System.out.println(reiziger1);
         }
         System.out.println("+++++++++++++++++++++++");
-//        rdao.save(reiziger);
     }
+
     private static void testAdresDAO(AdresDAO adao) throws SQLException {
 
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
@@ -81,12 +84,15 @@ public class Main {
     private static void testOvChipkaartDAO(OVChipkaartDAO odao, ReizigerDAO reizigerDAO) throws SQLException {
         System.out.println("++++++++++test ovchipkaart dao+++++++++++++");
 
-        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
-        Reiziger reiziger = new Reiziger("B de pepperoni", java.sql.Date.valueOf("1981-03-14"));
-        reiziger.setId(6);
+//        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
+//        Reiziger reiziger = new Reiziger("B de pepperoni", java.sql.Date.valueOf("1981-03-14"));
+//        reiziger.setId(6);
+
+        Reiziger reiziger = reizigerDAO.findById(5);
+//        reizigerDAO.delete(reiziger);
         OVChipkaart ovChipkaart = new OVChipkaart(8, java.sql.Date.valueOf("2021-03-14"), 1,12, reiziger);
         odao.delete(ovChipkaart);
-        reizigerDAO.save(reiziger);
+//        reizigerDAO.save(reiziger);
         odao.save(ovChipkaart);
         ovChipkaart.setSaldo(13.20);
         odao.update(ovChipkaart);
@@ -100,9 +106,44 @@ public class Main {
             System.out.println("---------------------");
 
         }
+
         odao.delete(ovChipkaart);
-        reizigerDAO.delete(reiziger);
         System.out.println("+++++++++++++++++++++++");
+
+    }
+
+    private static void testProductDAO(ProductDAO pdao) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ovchip","postgres","qwerty11");
+        ReizigerDAO reizigerDAOPsql = new ReizigerDAOPsql(connection);
+        OVChipkaartDAO ovChipkaartDAOPsql = new OVChipkaartDAOPsql(connection);
+        Product product = new Product(12,"baababobo", "productproductproduct", (long) 2.34);
+        Reiziger reiziger = reizigerDAOPsql.findById(5);
+        OVChipkaart ovChipkaart = new OVChipkaart(8, java.sql.Date.valueOf("2021-03-14"), 1,12, reiziger);
+
+//        reizigerDAOPsql.save(reiziger);
+
+        ovChipkaartDAOPsql.delete(ovChipkaart);
+        ovChipkaartDAOPsql.save(ovChipkaart);
+
+        product.addOvChipkaart(ovChipkaart);
+        //get producten
+//        System.out.println(pdao.findAll());
+
+        //save product
+        pdao.delete(product);
+        pdao.save(product);
+
+        for(Product product1: pdao.findAll()){
+            System.out.println(product1);
+        }
+//        System.out.println("met nieuw product: ");
+//        System.out.println(pdao.findAll());
+//        //delete product
+//        System.out.println("delete nieuw product: ");
+//        pdao.delete(product);
+//        System.out.println(pdao.findAll());
+
+//        System.out.println(pdao.findByOVChipkaart(ovChipkaart));
 
     }
 
@@ -113,9 +154,14 @@ public class Main {
             AdresDAO adresDAOPSql = new AdresDAOPSql(connection);
             OVChipkaartDAO ovChipkaartDAOPsql = new OVChipkaartDAOPsql(connection);
 
-            testReizigerDAO(reizigerDAOPsql);
-            testAdresDAO(adresDAOPSql);
+            ProductDAO productDAO = new ProductDAOPSql(connection, ovChipkaartDAOPsql);
+
+
+//            testReizigerDAO(reizigerDAOPsql);
+//            testAdresDAO(adresDAOPSql);
             testOvChipkaartDAO(ovChipkaartDAOPsql, reizigerDAOPsql);
+//            testProductDAO(productDAO);
+
         }catch (Exception e){
             e.printStackTrace();
         }
