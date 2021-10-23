@@ -13,11 +13,9 @@ import java.util.List;
 
 public class ProductDAOPSql implements ProductDAO {
     private final Connection conn;
-    private final OVChipkaartDAO ovChipkaartDAO;
 
-    public ProductDAOPSql(Connection conn, OVChipkaartDAO ovChipkaartDAO) {
+    public ProductDAOPSql(Connection conn) {
         this.conn = conn;
-        this.ovChipkaartDAO = ovChipkaartDAO;
     }
 
     @Override
@@ -62,27 +60,28 @@ public class ProductDAOPSql implements ProductDAO {
 
             String query = "UPDATE product SET naam = ?, beschrijving = ?, prijs = ? WHERE product_nummer = ?;";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setInt(1, productnummer);
-            preparedStmt.setString(2, naam);
-            preparedStmt.setString(3, beschrijving);
-            preparedStmt.setLong(4, prijs);
+            preparedStmt.setString(1, naam);
+            preparedStmt.setString(2, beschrijving);
+            preparedStmt.setLong(3, prijs);
+            preparedStmt.setInt(4, productnummer);
 
             // what if the updated product has a different list of ovchipcards?
-
 //          delete all povc with productnummer
             String deletePOVC = "DELETE FROM ov_chipkaart_product WHERE product_nummer = ?";
             PreparedStatement preparedStmtDeletePOVC = conn.prepareStatement(deletePOVC);
+            preparedStmtDeletePOVC.setInt(1, productnummer);
 
+            preparedStmtDeletePOVC.executeUpdate();
             //           re-save them from updated product
             for(OVChipkaart ovChipkaart : product.getOvChipkaarten()){
-                String queryPOVC = "INSERT INTO ov_chipkaart_product VALUES kaart_nummer, product_nummer (?,?);";
+                String queryPOVC = "INSERT INTO ov_chipkaart_product (kaart_nummer, product_nummer) VALUES  (?,?) ON CONFLICT DO NOTHING;";
                 PreparedStatement preparedStmtPOVC = conn.prepareStatement(queryPOVC);
                 int kaartNummer = ovChipkaart.getKaartNummer();
-                preparedStmt.setInt(1, kaartNummer);
-                preparedStmt.setInt(2, productnummer);
+                preparedStmtPOVC.setInt(1, kaartNummer);
+                preparedStmtPOVC.setInt(2, productnummer);
                 preparedStmtPOVC.executeUpdate();
             }
-            preparedStmtDeletePOVC.executeUpdate();
+
 
             int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));

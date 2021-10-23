@@ -25,24 +25,12 @@ public class OVChipkaart {
         return kaartNummer;
     }
 
-    public void setKaartNummer(int kaartNummer) {
-        this.kaartNummer = kaartNummer;
-    }
-
     public Date getGeldigTot() {
         return geldigTot;
     }
 
-    public void setGeldigTot(Date geldigTot) {
-        this.geldigTot = geldigTot;
-    }
-
     public int getKlasse() {
         return klasse;
-    }
-
-    public void setKlasse(int klasse) {
-        this.klasse = klasse;
     }
 
     public double getSaldo() {
@@ -72,9 +60,9 @@ public class OVChipkaart {
     @Override
     public String toString() {
 
-        String string = String.format("(ovChipkaart %s: geldig tot %s, %se klasse, saldo: €%s, van reiziger %s. producten: )", kaartNummer,geldigTot,klasse,saldo,reiziger.getNaam());
+        String string = String.format("=> ovChipkaart %s: geldig tot %s, %se klasse, saldo: €%s, van reiziger %s. producten: \n", kaartNummer,geldigTot,klasse,saldo,reiziger.getNaam());
         for(Product product : producten){
-            string += (product.getNaam() + ",\n");
+            string += ("* " + product.getNaam() + ",\n");
         }
         return string;
     }

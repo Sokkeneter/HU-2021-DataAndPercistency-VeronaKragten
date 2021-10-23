@@ -17,16 +17,9 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public void setOvChipkaarten(List<OVChipkaart> ovChipkaarten) {
-        this.ovChipkaarten = ovChipkaarten;
-    }
 
     public int getProductNummer() {
         return productNummer;
-    }
-
-    public void setProductNummer(int productNummer) {
-        this.productNummer = productNummer;
     }
 
     public String getNaam() {
@@ -41,28 +34,12 @@ public class Product {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
-        this.beschrijving = beschrijving;
-    }
-
     public long getPrijs() {
         return prijs;
     }
 
-    public void setPrijs(long prijs) {
-        this.prijs = prijs;
-    }
-
     public List<OVChipkaart> getOvChipkaarten() {
         return ovChipkaarten;
-    }
-
-    public List<Integer> getovChipKaartNummers() {
-        List<Integer> nummers = new ArrayList<Integer>();
-        for(OVChipkaart ovChipkaart : ovChipkaarten){
-            nummers.add(ovChipkaart.getKaartNummer());
-        }
-        return nummers;
     }
 
     public void addOvChipkaart(OVChipkaart ovChipkaart  ) {

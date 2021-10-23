@@ -25,6 +25,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             int klasse = ovChipkaart.getKlasse();
             double saldo = ovChipkaart.getSaldo();
             int reizigerId = ovChipkaart.getReiziger().getId();
+
             String query = "INSERT INTO ov_chipkaart VALUES (?, ?, ?, ?, ?);";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             preparedStmt.setInt(1, kaartNummer);
@@ -32,6 +33,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             preparedStmt.setInt(3, klasse);
             preparedStmt.setDouble(4, saldo);
             preparedStmt.setInt(5, reizigerId);
+            int resultSet = preparedStmt.executeUpdate();
 //            list of products
             for(Product product: ovChipkaart.getProducten()){
                 String queryPOVC = "INSERT INTO ov_chipkaart_product (kaart_nummer, product_nummer ) VALUES (?,?) ON CONFLICT DO NOTHING;";
@@ -42,7 +44,6 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 preparedStmtPOVC.executeUpdate();
             }
 
-            int resultSet = preparedStmt.executeUpdate();
             return Boolean.getBoolean(String.valueOf(resultSet));
         }catch (Exception e){
             e.printStackTrace();
@@ -72,6 +73,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             preparedStmtDeletePOVC.setInt(1, kaartNummer);
 
             preparedStmtDeletePOVC.executeUpdate();
+
             for(Product product: ovChipkaart.getProducten()){
                 String queryPOVC = "INSERT INTO ov_chipkaart_product (kaart_nummer, product_nummer ) VALUES (?,?);";
                 PreparedStatement preparedStmtPOVC = conn.prepareStatement(queryPOVC);
@@ -122,10 +124,27 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 Date geldigTot = resultSet.getDate("geldig_tot");
                 int klasse = resultSet.getInt("klasse");
                 double saldo = resultSet.getDouble("saldo");
-
-
                 OVChipkaart ovChipkaart = new OVChipkaart(kaartnummer,geldigTot,klasse,saldo,reiziger);
+
+
+//                producten
+                String queryOVC = "SELECT * FROM product JOIN ov_chipkaart_product ON product.product_nummer = ov_chipkaart_product.product_nummer WHERE kaart_nummer = ?;";
+                PreparedStatement statementOVC = conn.prepareStatement(queryOVC);
+                statementOVC.setInt(1, kaartnummer);
+                ResultSet resultSetOVC = statementOVC.executeQuery();
+                while(resultSetOVC.next()){
+                    int productNummer = resultSetOVC.getInt("product_nummer");
+                    String naam = resultSetOVC.getString("naam");
+                    String beschrijving = resultSetOVC.getString("beschrijving");
+                    long prijs = resultSetOVC.getLong("prijs");
+
+                    Product productOvChipkaart = new Product(productNummer,naam,beschrijving,prijs);
+                    ovChipkaart.addProduct(productOvChipkaart);
+                }
+
                 ovChipkaartList.add(ovChipkaart);
+
+
             }
             return ovChipkaartList;
 
@@ -138,7 +157,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public List<OVChipkaart> findAll() throws SQLException {
         try{
-            List<OVChipkaart> ovChipkaartList = new ArrayList<OVChipkaart>();
+            List<OVChipkaart> ovChipkaartList = new ArrayList<>();
             String query = "SELECT * FROM ov_chipkaart";
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
