@@ -122,7 +122,7 @@ public class Main {
         pdao.delete(product);
         pdao.save(product);
 
-        System.out.println("*********");
+        System.out.println("*****product zonder extra ovchipkaart****");
         for(Product product1: pdao.findAll()){
             System.out.println(product1);
         }
@@ -130,13 +130,15 @@ public class Main {
         product.setNaam("dagkaart met glitters");
         product.addOvChipkaart(ovChipkaartDAOPsql.findByReiziger(reizigerDAOPsql.findById(5)).get(0)); //truly sorry about this
         pdao.update(product);
-        System.out.println("*********");
-        System.out.println(product);
+        System.out.println("****met ovchipkaart*****");
+        System.out.println(pdao.findByOVChipkaart(ovChipkaartDAOPsql.findByReiziger(reizigerDAOPsql.findById(5)).get(0)));
         System.out.println("*********");
 
         for(Product product1: pdao.findAll()){
             System.out.println(product1);
         }
+        pdao.delete(product);
+
     }
 
     public static void main(String[] args) {
